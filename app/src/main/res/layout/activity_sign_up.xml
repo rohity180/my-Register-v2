@@ -4,6 +4,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_login_bg"
     tools:context=".sign_up">
+
+    <ImageView
+        android:id="@+id/sign_up_bg"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="-20dp"
+
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_edittext_layout"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:hint="Your Email"
+        app:hintTextAppearance="@style/TextInputLayoutHintText"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/sign_up_bg"
+        app:layout_constraintStart_toStartOf="@+id/sign_up_bg"
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_bg">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="actionNext"
+            android:nextFocusForward="@+id/f_r_n"
+            android:singleLine="true"
+            android:textSize="22dp"
+            tools:layout_editor_absoluteX="135dp"
+            tools:layout_editor_absoluteY="382dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:hint="Your Password"
+        app:hintTextAppearance="@style/TextInputLayoutHintText"
+        app:layout_constraintEnd_toEndOf="@+id/sign_up_bg"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/sign_up_bg"
+        app:layout_constraintTop_toBottomOf="@+id/email_edittext_layout" >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/password_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/f_r_n"
+        android:singleLine="true"
+        android:inputType="textPassword"
+        android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="-16dp" />
+</com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

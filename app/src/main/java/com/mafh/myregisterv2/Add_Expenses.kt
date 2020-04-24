@@ -124,6 +124,17 @@ class Add_Expenses : AppCompatActivity() {
 
 
         }
+
+        val btn_back = findViewById<Button>(R.id.back_btn)
+        btn_back.setOnClickListener {
+            val intent= Intent(this,sign_up::class.java)
+            startActivity(intent)
+        }
+
+
+
+
+
         label3.setOnClickListener {
 
             if (container3.isShown) {
