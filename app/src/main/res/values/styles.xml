@@ -51,4 +51,15 @@
         <item name="android:colorControlHighlight">#ffffff</item>
     </style>
 
+
+    <style name="TextInputLayoutHintText2">
+        <item name="android:textStyle">bold</item>
+        <item name="colorControlNormal">@android:color/black</item>
+        <item name="colorControlActivated">@android:color/holo_blue_dark</item>
+        <item name="android:textColorPrimary">@android:color/holo_orange_dark</item>
+        <item name="android:textColor">@color/colorSuccess</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:backgroundTint">@color/colorSuccess</item>
+    </style>
+
 </resources>
