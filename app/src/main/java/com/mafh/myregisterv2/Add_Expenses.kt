@@ -2,6 +2,7 @@ package com.mafh.myregisterv2
 
 import android.Manifest
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,16 +20,22 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class Add_Expenses : AppCompatActivity() {
+class Add_Expenses : AppCompatActivity()  {
 
     val image_upload_list = arrayListOf<Uri>()
     //val image_grid = findViewById<GridLayout>(R.id.images_grid)
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        check_login_status()
+
+        super.onCreate(savedInstanceState)
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -46,6 +53,7 @@ class Add_Expenses : AppCompatActivity() {
 
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
 
+
             // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
             // app-defined int constant that should be quite unique
 
@@ -53,8 +61,38 @@ class Add_Expenses : AppCompatActivity() {
         }
 
 
-        super.onCreate(savedInstanceState)
+
+
+
+        //check_login_status()
+
         setContentView(R.layout.activity_add__expenses)
+
+        var calendar = Calendar.getInstance()
+        var Year = calendar.get(Calendar.YEAR)
+        var Month = calendar.get(Calendar.MONTH)
+        var Day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+
+        val shifting_date = findViewById<TextInputEditText>(R.id.shifting_date)
+
+        var date = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
+
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH,day)
+            updateEditbox(calendar,shifting_date)
+        }
+
+        shifting_date.setOnClickListener {
+
+            DatePickerDialog(this,date,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
+
+        }
+
+
+
         val nxt_btn=findViewById<Button>(R.id.next_btn)
         val label1 = findViewById<LinearLayout>(R.id.layout_label_1)
         val container1 = findViewById<LinearLayout>(R.id.layout_container_1)
@@ -127,8 +165,12 @@ class Add_Expenses : AppCompatActivity() {
 
         val btn_back = findViewById<Button>(R.id.back_btn)
         btn_back.setOnClickListener {
-            val intent= Intent(this,sign_up::class.java)
-            startActivity(intent)
+            /*val intent= Intent(this,sign_up::class.java)
+            startActivity(intent)*/
+
+            FirebaseAuth.getInstance().signOut()
+            Toast.makeText(this,"You are Signed Out Successfully",Toast.LENGTH_SHORT)
+            check_login_status()
         }
 
 
@@ -305,14 +347,29 @@ class Add_Expenses : AppCompatActivity() {
 
     override fun onDestroy(){
         super.onDestroy()
-        Toast.makeText(this,"Bye Bye App", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this,"Bye Bye App", Toast.LENGTH_SHORT).show()
 
     }
 
-    fun add_image_in_grid(layout:GridLayout,context:Context,image_upload_list:List<Uri>)
+
+
+    private  fun  updateEditbox(calendar:Calendar, textbox:TextInputEditText) {
+        var myformat = "dd/MM/yyyy"
+        var sdf = SimpleDateFormat(myformat, Locale.US)
+        textbox.setText(sdf.format(calendar.time))
+
+
+}
+
+    private fun check_login_status()
     {
-
-
+        val uid = FirebaseAuth.getInstance().uid
+        if (uid == null)
+        {
+            val intent = Intent(this,login::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     class book_pages(media:String, f_r_n:String, party_num:String, packers_name:String, cli_name:String, quote_no:Int, s_d: Date, frm:String, to:String, labour_name:String, white_bag:Int, str_film:Int, roll:Int, tape:Int, rassi:Int, bubble:Int, news_papers:Int, crate_plastic:Int, blanket:Int, cartoon:Int, ac_mech_name:String, ac_mech_payment:Int, carpenter_name:String, carpenter_payment:Int, labour_charges:Int, vehicle_no:String, vehicle_charges:Int, diesel:Int, police:Int, domestic_charges:Int, b_a_t_fare:Int, goods_damage_less_pay:Int, quote_amount:Int, total_expenses:Int, exec_adv:Int, balance:Int)

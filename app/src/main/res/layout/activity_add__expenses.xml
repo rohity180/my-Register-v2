@@ -190,6 +190,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="date"
+                        android:clickable="true"
+                        android:focusable="false"
+
                         android:imeOptions="actionNext"
                         android:singleLine="true"
                         android:nextFocusForward="@+id/from"/>
