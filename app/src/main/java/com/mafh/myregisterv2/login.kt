@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class login : AppCompatActivity() {
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -80,6 +82,7 @@ class login : AppCompatActivity() {
         sign_up_link.setOnClickListener {
             val intent = Intent(this,sign_up::class.java)
             startActivity(intent)
+            finish()
         }
 
 

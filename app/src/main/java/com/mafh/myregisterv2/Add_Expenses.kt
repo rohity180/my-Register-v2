@@ -3,6 +3,7 @@ package com.mafh.myregisterv2
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,18 +23,22 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 
 class Add_Expenses : AppCompatActivity()  {
 
+
+
     val image_upload_list = arrayListOf<Uri>()
     //val image_grid = findViewById<GridLayout>(R.id.images_grid)
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        check_login_status()
+        //check_login_status()
 
         super.onCreate(savedInstanceState)
 
@@ -67,6 +72,8 @@ class Add_Expenses : AppCompatActivity()  {
         //check_login_status()
 
         setContentView(R.layout.activity_add__expenses)
+        authenticate()
+        //finishActivity(1231)
 
         var calendar = Calendar.getInstance()
         var Year = calendar.get(Calendar.YEAR)
@@ -84,6 +91,8 @@ class Add_Expenses : AppCompatActivity()  {
             calendar.set(Calendar.DAY_OF_MONTH,day)
             updateEditbox(calendar,shifting_date)
         }
+
+
 
         shifting_date.setOnClickListener {
 
@@ -104,6 +113,26 @@ class Add_Expenses : AppCompatActivity()  {
         val arrow_2 = findViewById<ImageView>(R.id.label_2_arrow)
         val arrow_3 = findViewById<ImageView>(R.id.label_3_arrow)
         val add_image = findViewById<ImageButton>(R.id.add_image)
+        val entry_date = findViewById<TextInputEditText>(R.id.entry_date)
+
+        var date2 = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
+
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH,day)
+            updateEditbox(calendar,entry_date)
+
+        }
+
+
+        var temp_sdf = SimpleDateFormat("dd/MM/yyyy" , Locale.US)
+        var today_date = temp_sdf.format(Date())
+        entry_date.setText(today_date)
+
+        entry_date.setOnClickListener {
+            DatePickerDialog(this,date2,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
 
 
 
@@ -118,6 +147,8 @@ class Add_Expenses : AppCompatActivity()  {
         label2.setBackgroundResource(backgroundResource)
         label3.setBackgroundResource(backgroundResource)
         container1.visibility= View.VISIBLE
+
+
 
         //arrow_1.setScaleType(ImageView.ScaleType.MATRIX)
         //matrix.postRotate((180).toFloat(), (arrow_1.drawable.bounds.width()/2).toFloat(), (arrow_1.drawable.bounds.height()/2).toFloat())
@@ -167,10 +198,11 @@ class Add_Expenses : AppCompatActivity()  {
         btn_back.setOnClickListener {
             /*val intent= Intent(this,sign_up::class.java)
             startActivity(intent)*/
-
-            FirebaseAuth.getInstance().signOut()
             Toast.makeText(this,"You are Signed Out Successfully",Toast.LENGTH_SHORT)
+            FirebaseAuth.getInstance().signOut()
             check_login_status()
+
+
         }
 
 
@@ -204,6 +236,7 @@ class Add_Expenses : AppCompatActivity()  {
         add_image.setOnClickListener {
             Toast.makeText(this,"Select an Image to add !! ", Toast.LENGTH_SHORT).show()
             selectImage(this)
+            Toast.makeText(this,"Image got Added !!!!" , Toast.LENGTH_SHORT).show()
         }
 
 
@@ -232,6 +265,21 @@ class Add_Expenses : AppCompatActivity()  {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode==1231) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                Toast.makeText(this, "Verified !", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Log.d("nexa","I am also being called")
+                finish()
+
+            }
+        }
+
+
         /*if (requestCode==0 && resultCode== Activity.RESULT_OK && data != null)
         {
             var uri = data.data
@@ -275,6 +323,9 @@ class Add_Expenses : AppCompatActivity()  {
             linear_layout.addView(imageview)
             layout.addView(linear_layout, lp)
         }*/
+
+
+
 
         if (requestCode==1 && resultCode== Activity.RESULT_OK && data != null)
         {
@@ -340,14 +391,17 @@ class Add_Expenses : AppCompatActivity()  {
             //lp.flexGrow = 1f
             linear_layout.addView(relative_layout)
             layout.addView(linear_layout, lp)
+            Log.d("Image2","Image got added")
         }
     }
 
 
 
+
+
     override fun onDestroy(){
         super.onDestroy()
-        //Toast.makeText(this,"Bye Bye App", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"Bye Bye App", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -370,6 +424,37 @@ class Add_Expenses : AppCompatActivity()  {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
+    }
+
+    private fun authenticate()
+    {
+        val keyguardManager: KeyguardManager = this.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            val credentialsIntent:Intent = keyguardManager.createConfirmDeviceCredentialIntent("Authentication Required", "please enter your pattern to receive your token")
+            if (credentialsIntent != null) {
+
+
+
+                startActivityForResult(credentialsIntent, 1231)
+
+
+            }
+            else {
+                //no password needed
+                return
+
+            }
+
+        //check_credentials()
+        //Log.d("checker", "Value of checker: $checker")
+
+        /*if (checker) {
+
+        val intent = Intent(this,Add_Expenses::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+
+        }*/
     }
 
     class book_pages(media:String, f_r_n:String, party_num:String, packers_name:String, cli_name:String, quote_no:Int, s_d: Date, frm:String, to:String, labour_name:String, white_bag:Int, str_film:Int, roll:Int, tape:Int, rassi:Int, bubble:Int, news_papers:Int, crate_plastic:Int, blanket:Int, cartoon:Int, ac_mech_name:String, ac_mech_payment:Int, carpenter_name:String, carpenter_payment:Int, labour_charges:Int, vehicle_no:String, vehicle_charges:Int, diesel:Int, police:Int, domestic_charges:Int, b_a_t_fare:Int, goods_damage_less_pay:Int, quote_amount:Int, total_expenses:Int, exec_adv:Int, balance:Int)
