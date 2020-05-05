@@ -78,19 +78,19 @@ class Add_Expenses : AppCompatActivity() {
         var Day = calendar.get(Calendar.DAY_OF_MONTH)
 
 
-        val shifting_date = findViewById<TextInputEditText>(R.id.shifting_date)
+        val shifting_date_et = findViewById<TextInputEditText>(R.id.shifting_date)
 
         var date = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
 
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, day)
-            updateEditbox(calendar, shifting_date)
+            updateEditbox(calendar, shifting_date_et)
         }
 
 
 
-        shifting_date.setOnClickListener {
+        shifting_date_et.setOnClickListener {
 
             DatePickerDialog(this, date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
 
@@ -108,23 +108,23 @@ class Add_Expenses : AppCompatActivity() {
         val arrow_2 = findViewById<ImageView>(R.id.label_2_arrow)
         val arrow_3 = findViewById<ImageView>(R.id.label_3_arrow)
         val add_image = findViewById<ImageButton>(R.id.add_image)
-        val entry_date = findViewById<TextInputEditText>(R.id.entry_date)
+        val entry_date_et = findViewById<TextInputEditText>(R.id.entry_date)
 
         var date2 = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
 
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, day)
-            updateEditbox(calendar, entry_date)
+            updateEditbox(calendar, entry_date_et)
 
         }
 
 
         var temp_sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         var today_date = temp_sdf.format(Date())
-        entry_date.setText(today_date)
+        entry_date_et.setText(today_date)
 
-        entry_date.setOnClickListener {
+        entry_date_et.setOnClickListener {
             DatePickerDialog(this, date2, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
@@ -211,28 +211,24 @@ class Add_Expenses : AppCompatActivity() {
 
 
         }
-        nxt_btn.setOnClickListener {
-            val intent = Intent(this, viewDataTabs::class.java)
-            startActivity(intent)
-        }
 
 
 
         add_image.setOnClickListener {
             Toast.makeText(this, "Select an Image to add !! ", Toast.LENGTH_SHORT).show()
             selectImage(this)
-            Toast.makeText(this, "Image got Added !!!!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Image got Added !!!!", Toast.LENGTH_SHORT).show()
         }
 
 
         //Data Preparation Part Here
-        val entry_date_et = findViewById<TextInputEditText>(R.id.entry_date)
+        //val entry_date_et = findViewById<TextInputEditText>(R.id.entry_date)
         val media_et = findViewById<TextInputEditText>(R.id.media)
         val frn_et = findViewById<TextInputEditText>(R.id.f_r_n)
         val party_no_et = findViewById<TextInputEditText>(R.id.party_numbers)
         val client_name_et = findViewById<TextInputEditText>(R.id.client_name)
         val quotation_number_et = findViewById<TextInputEditText>(R.id.quotation_number)
-        val shifting_date_et = findViewById<TextInputEditText>(R.id.shifting_date)
+        //val shifting_date_et = findViewById<TextInputEditText>(R.id.shifting_date)
         val from_et = findViewById<TextInputEditText>(R.id.from)
         val to_et = findViewById<TextInputEditText>(R.id.to)
 
@@ -281,6 +277,80 @@ class Add_Expenses : AppCompatActivity() {
         crate_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,crate_q_et,crate_r_et,crate_et) }
         blanket_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,blanket_q_et,blanket_r_et,blanket_et) }
         cartoon_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,cartoon_q_et,cartoon_r_et,cartoon_et) }
+
+        //3. payment and charges
+        val ac_mech_payment_et = findViewById<TextInputEditText>(R.id.ac_mech_payment)
+        val ac_mech_name_et = findViewById<TextInputEditText>(R.id.ac_mech_name)
+        val carpenter_payment_et = findViewById<TextInputEditText>(R.id.carpenter_payment)
+        val carpenter_name_et = findViewById<TextInputEditText>(R.id.carpenter_name)
+        val labour_charges_et = findViewById<TextInputEditText>(R.id.labour_charges)
+        val vehicle_no_et = findViewById<TextInputEditText>(R.id.vehicle_no)
+        val vehicle_charges_et = findViewById<TextInputEditText>(R.id.vehicle_charges)
+        val diesel_et = findViewById<TextInputEditText>(R.id.vehicle_diesel)
+        val police_et = findViewById<TextInputEditText>(R.id.vehicle_police)
+        val domestic_charges_et = findViewById<TextInputEditText>(R.id.domestic_charges)
+        val b_a_t_fare_et = findViewById<TextInputEditText>(R.id.bus_auto_train_fare)
+        val goods_damage_less_pay_et = findViewById<TextInputEditText>(R.id.damage_less_amount)
+        val quote_amount_et = findViewById<TextInputEditText>(R.id.quotation_amount)
+        val exec_adv_et = findViewById<TextInputEditText>(R.id.executive_advance)
+        val other_expenses_et = findViewById<TextInputEditText>(R.id.other_expenses)
+        val total_expenses_et =  findViewById<TextInputEditText>(R.id.total_expenses)
+        val other_income_et = findViewById<TextInputEditText>(R.id.other_income)
+        val profit_et = findViewById<TextInputEditText>(R.id.total_balance_profit)
+
+        // Variables part 1
+        var entry_date:Long
+        var shifting_date:Long
+        var media:String
+        var f_r_n:String
+        var party_num:String
+        var packers_name:String
+        var cli_name:String
+        var quote_no:String
+        var frm:String
+        var to:String
+
+        //Variables Part 2
+        var labour_name:String
+        var white_bag:Int
+        var str_film:Int
+        var roll:Int
+        var tape:Int
+        var rassi:Int
+        var bubble:Int
+        var news_papers:Int
+        var crate_plastic:Int
+        var blanket:Int
+        var cartoon:Int
+
+        //Variables Part 3
+        var ac_mech_payment:Int
+        var ac_mech_name:String
+        var carpenter_payment:Int
+        var carpenter_name:String
+        var labour_charges:Int
+        var vehicle_no:String
+        var vehicle_charges:Int
+        var diesel:Int
+        var police:Int
+        var domestic_charges:Int
+        var b_a_t_fare:Int
+        var goods_damage_less_pay:Int
+        var quote_amount:Int
+        var exec_adv:Int
+        var other_expenses:Int
+        var other_income:Int
+        var total_expenses:Int
+        var profit:Int
+
+
+
+
+
+        nxt_btn.setOnClickListener {
+            val intent = Intent(this, viewDataTabs::class.java)
+            startActivity(intent)
+        }
 
 
 
@@ -468,7 +538,7 @@ class Add_Expenses : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Toast.makeText(this, "Bye Bye App", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Thanks for Using My Register", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -518,7 +588,9 @@ class Add_Expenses : AppCompatActivity() {
         }*/
     }
 
-   data class book_pages(var entry_date:Long, var media: String, var f_r_n: String, var party_num: String, var packers_name: String, var cli_name: String, var quote_no: Int, var s_d: Long, var frm: String, var to: String, var labour_name: String, var white_bag: Int, var str_film: Int, var roll: Int, var tape: Int, var rassi: Int, var bubble: Int, var news_papers: Int, var crate_plastic: Int, var blanket: Int, var cartoon: Int, var ac_mech_name: String, var ac_mech_payment: Int, var carpenter_name: String, var carpenter_payment: Int, var labour_charges: Int, var vehicle_no: String, var vehicle_charges: Int, var diesel: Int, var police: Int, var domestic_charges: Int, var b_a_t_fare: Int, var goods_damage_less_pay: Int, var quote_amount: Int, var total_expenses: Int, var exec_adv: Int, var balance: Int ,var image_urls: ArrayList<String> ) {
+   data class book_pages(var entry_date:Long, var media: String, var f_r_n: String, var party_num: String, var packers_name: String, var cli_name: String, var quote_no: String, var shifting_date: Long, var frm: String, var to: String, var labour_name: String, var white_bag: Int, var str_film: Int, var roll: Int, var tape: Int, var rassi: Int, var bubble: Int, var news_papers: Int, var crate_plastic: Int, var blanket: Int, var cartoon: Int, var ac_mech_name: String, var ac_mech_payment: Int, var carpenter_name: String, var carpenter_payment: Int, var labour_charges: Int, var vehicle_no: String, var vehicle_charges: Int, var diesel: Int, var police: Int, var domestic_charges: Int, var b_a_t_fare: Int, var goods_damage_less_pay: Int, var quote_amount: Int, var exec_adv: Int,var other_expenses:Int, var other_income:Int, var total_expenses: Int, var profit: Int ,var image_urls: ArrayList<String> ) {
+
+
 
 
     }

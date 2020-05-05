@@ -2037,6 +2037,38 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="360dp"
                 android:layout_height="70dp"
+                android:hint="Other Expenses"
+                app:hintTextAppearance="@style/TextInputLayoutHintText"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/other_expenses"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="360dp"
+                android:layout_height="70dp"
+                android:hint="Other Income"
+                app:hintTextAppearance="@style/TextInputLayoutHintText"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/other_income"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="360dp"
+                android:layout_height="70dp"
                 android:hint="Total Expenses"
                 app:hintTextAppearance="@style/TextInputLayoutHintText"
                 android:paddingLeft="30dp"
