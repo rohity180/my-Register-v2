@@ -24,6 +24,8 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.image_layout_cancellable.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -226,6 +228,7 @@ class Add_Expenses : AppCompatActivity() {
         val media_et = findViewById<TextInputEditText>(R.id.media)
         val frn_et = findViewById<TextInputEditText>(R.id.f_r_n)
         val party_no_et = findViewById<TextInputEditText>(R.id.party_numbers)
+        val packers_name_et = findViewById<TextInputEditText>(R.id.packers_name)
         val client_name_et = findViewById<TextInputEditText>(R.id.client_name)
         val quotation_number_et = findViewById<TextInputEditText>(R.id.quotation_number)
         //val shifting_date_et = findViewById<TextInputEditText>(R.id.shifting_date)
@@ -266,17 +269,6 @@ class Add_Expenses : AppCompatActivity() {
         val crate_et = findViewById<TextInputEditText>(R.id.crate_plastic_total)
         val blanket_et = findViewById<TextInputEditText>(R.id.blanket_total)
         val cartoon_et = findViewById<TextInputEditText>(R.id.cartoon_total)
-        
-        white_bag_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,white_bag_q_et,white_bag_r_et,white_bag_et) }
-        str_film_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,stretch_film_q_et,stretch_film_r_et,str_film_et) }
-        roll_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,roll_q_et,roll_r_et,roll_et) }
-        tape_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,tape_q_et,tape_r_et,tape_et)  }
-        rassi_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,rassi_q_et,rassi_r_et,rassi_et)  }
-        bubble_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,bubble_q_et,bubble_r_et,bubble_et)  }
-        newspaper_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,newspaper_q_et,newspaper_r_et,newspaper_et)  }
-        crate_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,crate_q_et,crate_r_et,crate_et) }
-        blanket_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,blanket_q_et,blanket_r_et,blanket_et) }
-        cartoon_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus,cartoon_q_et,cartoon_r_et,cartoon_et) }
 
         //3. payment and charges
         val ac_mech_payment_et = findViewById<TextInputEditText>(R.id.ac_mech_payment)
@@ -294,95 +286,319 @@ class Add_Expenses : AppCompatActivity() {
         val quote_amount_et = findViewById<TextInputEditText>(R.id.quotation_amount)
         val exec_adv_et = findViewById<TextInputEditText>(R.id.executive_advance)
         val other_expenses_et = findViewById<TextInputEditText>(R.id.other_expenses)
-        val total_expenses_et =  findViewById<TextInputEditText>(R.id.total_expenses)
+        val total_expenses_et = findViewById<TextInputEditText>(R.id.total_expenses)
         val other_income_et = findViewById<TextInputEditText>(R.id.other_income)
         val profit_et = findViewById<TextInputEditText>(R.id.total_balance_profit)
+        val balance_et = findViewById<TextInputEditText>(R.id.total_balance)
+
+        white_bag_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, white_bag_q_et, white_bag_r_et, white_bag_et) }
+        str_film_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, stretch_film_q_et, stretch_film_r_et, str_film_et) }
+        roll_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, roll_q_et, roll_r_et, roll_et) }
+        tape_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, tape_q_et, tape_r_et, tape_et) }
+        rassi_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, rassi_q_et, rassi_r_et, rassi_et) }
+        bubble_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, bubble_q_et, bubble_r_et, bubble_et) }
+        newspaper_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, newspaper_q_et, newspaper_r_et, newspaper_et) }
+        crate_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, crate_q_et, crate_r_et, crate_et) }
+        blanket_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, blanket_q_et, blanket_r_et, blanket_et) }
+        cartoon_et.setOnFocusChangeListener { v, hasFocus -> calculate_price(hasFocus, cartoon_q_et, cartoon_r_et, cartoon_et) }
+
 
         // Variables part 1
-        var entry_date:Long
-        var shifting_date:Long
-        var media:String
-        var f_r_n:String
-        var party_num:String
-        var packers_name:String
-        var cli_name:String
-        var quote_no:String
-        var frm:String
-        var to:String
+        var entry_date: Long
+        var shifting_date: Long
+        var media: String
+        var f_r_n: String
+        var party_num: String
+        var packers_name: String
+        var cli_name: String
+        var quote_no: String
+        var frm: String
+        var to: String
 
         //Variables Part 2
-        var labour_name:String
-        var white_bag:Int
-        var str_film:Int
-        var roll:Int
-        var tape:Int
-        var rassi:Int
-        var bubble:Int
-        var news_papers:Int
-        var crate_plastic:Int
-        var blanket:Int
-        var cartoon:Int
+        var labour_name: String
+        var white_bag: Int
+        var str_film: Int
+        var roll: Int
+        var tape: Int
+        var rassi: Int
+        var bubble: Int
+        var news_papers: Int
+        var crate_plastic: Int
+        var blanket: Int
+        var cartoon: Int
 
         //Variables Part 3
-        var ac_mech_payment:Int
-        var ac_mech_name:String
-        var carpenter_payment:Int
-        var carpenter_name:String
-        var labour_charges:Int
-        var vehicle_no:String
-        var vehicle_charges:Int
-        var diesel:Int
-        var police:Int
-        var domestic_charges:Int
-        var b_a_t_fare:Int
-        var goods_damage_less_pay:Int
-        var quote_amount:Int
-        var exec_adv:Int
-        var other_expenses:Int
-        var other_income:Int
-        var total_expenses:Int
-        var profit:Int
+        var ac_mech_payment: Int
+        var ac_mech_name: String
+        var carpenter_payment: Int
+        var carpenter_name: String
+        var labour_charges: Int
+        var vehicle_no: String
+        var vehicle_charges: Int
+        var diesel: Int
+        var police: Int
+        var domestic_charges: Int
+        var b_a_t_fare: Int
+        var goods_damage_less_pay: Int
+        var quote_amount: Int
+        var exec_adv: Int
+        var other_expenses: Int
+        var other_income: Int
+        var total_expenses: Int
+        var profit: Int
+        var balance: Int
 
 
 
+
+
+        total_expenses_et.setOnFocusChangeListener { v, hasFocus ->
+
+            if (hasFocus) {
+                // Variables part 1
+                /*entry_date =get_long(entry_date_et)
+               shifting_date = get_long(shifting_date_et)
+               var media:String =
+               var f_r_n:String =
+               var party_num:String =
+               var packers_name:String =
+               var cli_name:String =
+               var quote_no:String =
+               var frm:String =
+               var to:String =*/
+
+                //Variables Part 2
+                //var labour_name:String =
+
+
+                white_bag = get_int(white_bag_et)
+                str_film = get_int(str_film_et)
+                roll = get_int(roll_et)
+                tape = get_int(tape_et)
+                rassi = get_int(rassi_et)
+                bubble = get_int(bubble_et)
+                news_papers = get_int(newspaper_et)
+                crate_plastic = get_int(crate_et)
+                blanket = get_int(blanket_et)
+                cartoon = get_int(cartoon_et)
+
+                //Variables Part 3
+                ac_mech_payment = get_int(ac_mech_payment_et)
+                //var ac_mech_name:String
+                carpenter_payment = get_int(carpenter_payment_et)
+                //var carpenter_name:String
+                labour_charges = get_int(labour_charges_et)
+                //var vehicle_no:String
+                vehicle_charges = get_int(vehicle_charges_et)
+                diesel = get_int(diesel_et)
+                police = get_int(police_et)
+                domestic_charges = get_int(domestic_charges_et)
+                b_a_t_fare = get_int(b_a_t_fare_et)
+                goods_damage_less_pay = get_int(goods_damage_less_pay_et)
+                quote_amount = get_int(quote_amount_et)
+                exec_adv = get_int(exec_adv_et)
+                other_expenses = get_int(other_expenses_et)
+                other_income = get_int(other_income_et)
+                total_expenses = white_bag + str_film + roll + rassi + tape + bubble + news_papers + crate_plastic + blanket + cartoon + ac_mech_payment + carpenter_payment + labour_charges + vehicle_charges + diesel + police + domestic_charges + b_a_t_fare + goods_damage_less_pay + other_expenses
+                profit = quote_amount - total_expenses + other_income
+                balance = quote_amount - exec_adv
+
+
+                total_expenses_et.setText(total_expenses.toString())
+                profit_et.setText(profit.toString())
+                balance_et.setText(balance.toString())
+            }
+
+        }
+
+        //Log.d("vals1","total expenses: ${total_expenses.toString()}")
 
 
         nxt_btn.setOnClickListener {
-            val intent = Intent(this, viewDataTabs::class.java)
-            startActivity(intent)
+            /*val intent = Intent(this, viewDataTabs::class.java)
+            startActivity(intent)*/
+            // Variables part 1
+            entry_date = get_long(entry_date_et)
+            shifting_date = get_long(shifting_date_et)
+            media = get_string(media_et)
+            f_r_n = get_string(frn_et)
+            party_num = get_string(party_no_et)
+            packers_name = get_string(packers_name_et)
+            cli_name = get_string(client_name_et)
+            quote_no = get_string(quotation_number_et)
+            frm = get_string(from_et)
+            to = get_string(to_et)
+
+            //Variables Part 2
+            labour_name = get_string(labour_name_et)
+
+
+
+            white_bag = get_int(white_bag_et)
+            str_film = get_int(str_film_et)
+            roll = get_int(roll_et)
+            tape = get_int(tape_et)
+            rassi = get_int(rassi_et)
+            bubble = get_int(bubble_et)
+            news_papers = get_int(newspaper_et)
+            crate_plastic = get_int(crate_et)
+            blanket = get_int(blanket_et)
+            cartoon = get_int(cartoon_et)
+
+            //Variables Part 3
+            ac_mech_payment = get_int(ac_mech_payment_et)
+            ac_mech_name = get_string(ac_mech_name_et)
+            carpenter_payment = get_int(carpenter_payment_et)
+            carpenter_name = get_string(carpenter_name_et)
+            labour_charges = get_int(labour_charges_et)
+            vehicle_no = get_string(vehicle_no_et)
+            vehicle_charges = get_int(vehicle_charges_et)
+            diesel = get_int(diesel_et)
+            police = get_int(police_et)
+            domestic_charges = get_int(domestic_charges_et)
+            b_a_t_fare = get_int(b_a_t_fare_et)
+            goods_damage_less_pay = get_int(goods_damage_less_pay_et)
+            quote_amount = get_int(quote_amount_et)
+            exec_adv = get_int(exec_adv_et)
+            other_expenses = get_int(other_expenses_et)
+            other_income = get_int(other_income_et)
+            total_expenses = white_bag + str_film + roll + rassi + tape + bubble + news_papers + crate_plastic + blanket + cartoon + ac_mech_payment + carpenter_payment + labour_charges + vehicle_charges + diesel + police + domestic_charges + b_a_t_fare + goods_damage_less_pay + other_expenses
+            profit = quote_amount - total_expenses + other_income
+            balance = quote_amount - exec_adv
+
+
+            val cal:Calendar = Calendar.getInstance()
+            val d = Date(entry_date)
+            cal.time = d
+            var week:Int = cal.get(Calendar.WEEK_OF_YEAR);
+            var month:Int = cal.get(Calendar.MONTH)
+            var year:Int = cal.get(Calendar.YEAR)
+
+
+            //total_expenses_et.setText(total_expenses.toString())
+            //profit_et.setText(profit.toString())
+            //balance_et.setText(balance.toString())
+            var download_urls = arrayListOf<String>()
+
+            if (image_upload_list.isNotEmpty()) {
+                for (i in image_upload_list.indices) {
+                    Log.d("uploader_db", "value of i : $i and size of image_up_list: ${image_upload_list.size}")
+                    var item = image_upload_list[i]
+                    val filename = UUID.randomUUID().toString()
+                    val ref = FirebaseStorage.getInstance().getReference("/data_images/$filename")
+                    val d = ref.putFile(item).addOnSuccessListener {
+                        ref.downloadUrl.addOnSuccessListener {
+                            download_urls.add(it.toString())
+                            Log.d("uploader_db", "Download URLs : ${download_urls.toString()}")
+                            val uid = FirebaseAuth.getInstance().uid
+                            val db_ref_images = FirebaseDatabase.getInstance().getReference("/users/$uid/Images/$entry_date")
+                            //Log.d("uploader_db", "value of i : $i and size of image_up_list: ${image_upload_list.size}")
+                            if (image_upload_list.size == download_urls.size) {
+                                Log.d("uploader_db", "Download URLs : ${download_urls.toString()}")
+                                db_ref_images.setValue(download_urls).addOnSuccessListener {
+                                    Log.d("uploader_db", "${download_urls.size} Images got added")
+                                    Toast.makeText(this, "Images got Uploaded", Toast.LENGTH_SHORT).show()
+                                }.addOnFailureListener {
+                                    Log.d("uploader_db", "Images could not got added ${it.message}")
+                                    Toast.makeText(this, "Images Failed to  get Uploaded \n:${it.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                        }
+
+
+                    }
+                    //Log.d("uploads_", "Download URLs : ${download_urls.toString()}")
+                }
+            }
+            val uid = FirebaseAuth.getInstance().uid
+            var page = book_pages(entry_date, media, f_r_n, party_num, packers_name, cli_name, quote_no, shifting_date, frm, to, labour_name, white_bag, str_film, roll, tape, rassi, bubble, news_papers, crate_plastic, blanket, cartoon, ac_mech_name, ac_mech_payment, carpenter_name, carpenter_payment, labour_charges, vehicle_no, vehicle_charges, diesel, police, domestic_charges, b_a_t_fare, goods_damage_less_pay, quote_amount, exec_adv, other_expenses, other_income, total_expenses, profit, balance,week,month, year)
+            val db_ref_pages = FirebaseDatabase.getInstance().getReference("/users/$uid/Register Pages/$entry_date")
+            db_ref_pages.setValue(page).addOnSuccessListener {
+                Toast.makeText(this, "Data Saved to Secure Database", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener {
+                Toast.makeText(this, "Unable to save data: \n:${it.message}", Toast.LENGTH_SHORT).show()
+            }
         }
-
-
 
 
     }
 
+    fun upload_images_to_firebase(uri: Uri) {
 
-    private fun calculate_price(hasFocus:Boolean,quantity:TextInputEditText , rate:TextInputEditText , total:TextInputEditText)
-    {
-        Log.d("toucher","value of hasfocus: $hasFocus")
-        if(hasFocus) {
-            Log.d("toucher","crossed first if")
+
+        val filename = UUID.randomUUID().toString()
+        val ref = FirebaseStorage.getInstance().getReference("/data_images/$filename")
+        val d = ref.putFile(uri).addOnSuccessListener {
+            ref.downloadUrl.addOnSuccessListener {
+
+                Log.d("uploads_", it.toString())
+
+            }
+
+
+        }
+        /*val b = run { ref.downloadUrl.addOnSuccessListener {
+                it.toString()
+            Log.d("uploads_","vaue of b : ${it.toString()}")
+        } }
+        Log.d("uploads_","vaue of it : ${b.toString()}")
+        //return  array[array.size - 1]
+        return b.toString()*/
+    }
+
+    fun get_int(tb: TextInputEditText): Int {
+        try {
+            var temp_txt = tb.text.toString()
+            var num = temp_txt.toInt()
+            return num
+        } catch (e: Exception) {
+            Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
+            return 0
+        }
+
+
+    }
+
+    fun get_string(tb: TextInputEditText): String {
+        if (tb.text.toString().isBlank())
+            return "null"
+        else
+            return tb.text.toString()
+    }
+
+    fun get_long(tb: TextInputEditText): Long {
+        if (tb.text.toString().isBlank()) {
+            return System.currentTimeMillis()
+        } else {
+            val df = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+            var date = tb.text.toString()
+            return df.parse(date).time
+        }
+    }
+
+
+    private fun calculate_price(hasFocus: Boolean, quantity: TextInputEditText, rate: TextInputEditText, total: TextInputEditText) {
+        Log.d("toucher", "value of hasfocus: $hasFocus")
+        if (hasFocus) {
+            Log.d("toucher", "crossed first if")
             if (quantity.text.toString().isBlank() || rate.text.toString().isBlank()) {
                 Toast.makeText(this, "Blank or Invalid values, please check", Toast.LENGTH_SHORT).show()
-                Log.d("toucher","Quantity: ${quantity.text} and rate: ${rate.text}")
+                Log.d("toucher", "Quantity: ${quantity.text} and rate: ${rate.text}")
                 return
             }
             try {
                 val q = (quantity.text.toString()).toInt()
                 val r = (rate.text.toString()).toInt()
-                total.setText((q*r).toString())
+                total.setText((q * r).toString())
 
-            }
-            catch (e: Exception)
-            {
+            } catch (e: Exception) {
                 Toast.makeText(this, "Invalid values, please check \n ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
-        }
-        else
-        {
-            Log.d("toucher","It came here")
+        } else {
+            Log.d("toucher", "It came here")
         }
     }
 
@@ -500,7 +716,7 @@ class Add_Expenses : AppCompatActivity() {
             imagebutton.background = getDrawable(R.drawable.ic_close)
             imagebutton.id = img_btn_id
             imagebutton.setOnClickListener {
-                Toast.makeText(this,"Removed",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Removed", Toast.LENGTH_SHORT).show()
                 //Toast.makeText(this, "Lin Lay ID removed : $lin_lay_id",Toast.LENGTH_SHORT).show()
                 layout.removeView(findViewById(lin_lay_id))
                 image_upload_list.remove(image_upload_list[image_upload_list.size - 1])
@@ -588,12 +804,10 @@ class Add_Expenses : AppCompatActivity() {
         }*/
     }
 
-   data class book_pages(var entry_date:Long, var media: String, var f_r_n: String, var party_num: String, var packers_name: String, var cli_name: String, var quote_no: String, var shifting_date: Long, var frm: String, var to: String, var labour_name: String, var white_bag: Int, var str_film: Int, var roll: Int, var tape: Int, var rassi: Int, var bubble: Int, var news_papers: Int, var crate_plastic: Int, var blanket: Int, var cartoon: Int, var ac_mech_name: String, var ac_mech_payment: Int, var carpenter_name: String, var carpenter_payment: Int, var labour_charges: Int, var vehicle_no: String, var vehicle_charges: Int, var diesel: Int, var police: Int, var domestic_charges: Int, var b_a_t_fare: Int, var goods_damage_less_pay: Int, var quote_amount: Int, var exec_adv: Int,var other_expenses:Int, var other_income:Int, var total_expenses: Int, var profit: Int ,var image_urls: ArrayList<String> ) {
+    /*data class book_pages(var entry_date: Long, var media: String, var f_r_n: String, var party_num: String, var packers_name: String, var cli_name: String, var quote_no: String, var shifting_date: Long, var frm: String, var to: String, var labour_name: String, var white_bag: Int, var str_film: Int, var roll: Int, var tape: Int, var rassi: Int, var bubble: Int, var news_papers: Int, var crate_plastic: Int, var blanket: Int, var cartoon: Int, var ac_mech_name: String, var ac_mech_payment: Int, var carpenter_name: String, var carpenter_payment: Int, var labour_charges: Int, var vehicle_no: String, var vehicle_charges: Int, var diesel: Int, var police: Int, var domestic_charges: Int, var b_a_t_fare: Int, var goods_damage_less_pay: Int, var quote_amount: Int, var exec_adv: Int, var other_expenses: Int, var other_income: Int, var total_expenses: Int, var profit: Int, var balance: Int) {
 
 
-
-
-    }
+    }*/
 
 }
 

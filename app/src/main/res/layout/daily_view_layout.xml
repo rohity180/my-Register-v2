@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5sp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/daily_date"
+        android:textSize="35sp"
+        android:text="27"
+        android:layout_gravity="bottom">
+
+    </TextView>
+
+    <TextView
+        android:layout_marginLeft="5sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/daily_month"
+        android:textSize="18sp"
+        android:text="January"
+        android:layout_gravity="bottom">
+
+    </TextView>
+
+    <TextView
+        android:layout_marginLeft="5sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/daily_year"
+        android:textSize="18sp"
+        android:text="2021"
+        android:layout_gravity="bottom">
+
+    </TextView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/daily_profit_loss"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="10,00,000"
+        android:textAlignment="textEnd"
+        android:textSize="30sp">
+
+    </TextView>
+
+</LinearLayout>
