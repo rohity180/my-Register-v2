@@ -186,11 +186,11 @@ class Add_Expenses : AppCompatActivity() {
 
         val btn_back = findViewById<Button>(R.id.back_btn)
         btn_back.setOnClickListener {
-            /*val intent= Intent(this,sign_up::class.java)
-            startActivity(intent)*/
-            Toast.makeText(this, "You are Signed Out Successfully", Toast.LENGTH_SHORT)
+            val intent= Intent(this,viewDataTabs::class.java)
+            startActivity(intent)
+            /*Toast.makeText(this, "You are Signed Out Successfully", Toast.LENGTH_SHORT)
             FirebaseAuth.getInstance().signOut()
-            check_login_status()
+            check_login_status()*/
 
 
         }
