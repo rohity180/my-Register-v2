@@ -12,7 +12,7 @@
         android:id="@+id/recycler_daily"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10sp" />
+        android:layout_margin="5sp" />
 
 
 </FrameLayout>

@@ -46,6 +46,7 @@ class login_checker_blank_activity : Activity() {
         }
 
 
+
         check_login_status()
 
         Log.d("tagger","after launching password pad 4")

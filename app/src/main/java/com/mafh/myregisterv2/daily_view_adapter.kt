@@ -1,6 +1,7 @@
 package com.mafh.myregisterv2
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,20 @@ class daily_view_adapter(val ctx:Context , var page:ArrayList<book_pages>):Recyc
         }
         holder.view.daily_month.setText(months[month])
         holder.view.daily_year.setText((page_data.year).toString())
-        holder.view.daily_profit_loss.setText((page_data.profit).toString())
+        if(page_data.profit<=0)
+        {
+            holder.view.daily_profit_loss.setText((page_data.profit * -1).toString())
+            holder.view.daily_profit_loss.setTextColor(Color.rgb(205,92,92))
+            holder.view.d_calendar_ic.setImageResource(R.drawable.ic_calendar_red)
+            holder.view.dailyview_chart.setImageResource(R.drawable.ic_line_chart_red)
+        }
+        else{
+            holder.view.daily_profit_loss.setText((page_data.profit).toString())
+            holder.view.daily_profit_loss.setTextColor(Color.rgb(141,191,139))
+            holder.view.d_calendar_ic.setImageResource(R.drawable.ic_calendar_green)
+            holder.view.dailyview_chart.setImageResource(R.drawable.ic_line_chart_green)
+
+        }
 
         fun newer()
         {
